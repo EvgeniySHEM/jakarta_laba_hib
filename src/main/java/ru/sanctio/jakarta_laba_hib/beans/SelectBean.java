@@ -11,17 +11,23 @@ import java.util.List;
 public class SelectBean implements SelectBeanLocal {
     @EJB
     private DbManagerLocal dbManager;
-
     @Override
     public List<AddressEntity> getData(String filterName, String filterType) {
         if ((filterName != null && !filterName.isEmpty()) && (filterType != null && !filterType.isEmpty())) {
             return dbManager.getFilteredInformation(filterName, filterType);
         } else if (filterName != null && !filterName.isEmpty()) {
-            return dbManager.getFilteredByNameInformation(filterName);
+            return dbManager.getFilteredByNameAndAddressInformation(filterName);
         } else if (filterType != null && !filterType.isEmpty()) {
             return dbManager.getFilteredByTypeInformation(filterType);
         } else {
             return dbManager.getAllInformation();
         }
+    }
+
+    @Override
+    public List<AddressEntity> getSortedData(String filterName, String filterType) {
+        List<AddressEntity> list = getData(filterName, filterType);
+        list.sort((a, b) -> a.getClient().getClientId() - b.getClient().getClientId());
+        return list;
     }
 }

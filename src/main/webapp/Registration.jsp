@@ -11,33 +11,30 @@
     <table align="center" cellpadding="5">
         <tr>
             <td><label>Client name</label></td>
-            <td><input type="text" name="clientName" required autocomplete="off">
-                Макс
+            <td><input type="text" name="clientName" pattern="^[а-яёА-ЯЁ{\-\s,.}]+$"
+                       required autocomplete="off"
+                       title="Допустимо использование  только  русского  алфавита">
             </td>
         </tr>
         <tr>
             <td><label>IP-адрес (IPv4)</label></td>
-            <td><input type="text" name="ip" required autocomplete="off" title="пример: 192.168.000.001">
-                243.111.123.14
+            <td><input type="text" name="ip"
+                       pattern="^(([01]?\d?\d|2[0-4]\d|25[0-5])\.){3}([01]?\d?\d|2[0-4]\d|25[0-5])$"
+                       required autocomplete="off" title="пример: 192.168.1.1">
             </td>
         </tr>
         <tr>
             <td><label>Mac-адрес</label></td>
-            <td><input type="text" name="mac" required autocomplete="off">
-                77-6s-52-7f-ja-4h
-            </td>
+            <td><input type="text" name="mac" pattern="^([0-9A-Za-z]{2}[-]){5}([0-9A-Za-z]{2})$"
+                       required autocomplete="off" title="пример: 77-6s-52-7f-ja-4h"></td>
         </tr>
         <tr>
             <td><label>Model</label></td>
-            <td><input type="text" name="model" required autocomplete="off">
-                model2
-            </td>
+            <td><input type="text" name="model" required autocomplete="off"></td>
         </tr>
         <tr>
             <td><label>Address</label></td>
-            <td><input type="text" name="address" required autocomplete="off">
-                Moscow
-            </td>
+            <td><input type="text" name="address" required autocomplete="off"></td>
         </tr>
         <tr>
             <td><label>Type</label></td>

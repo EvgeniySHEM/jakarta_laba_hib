@@ -29,7 +29,7 @@ public class ClientEntity implements Serializable {
     @Basic
     @Column(name = "added")
     private Date added;
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private List<AddressEntity> addresses = new ArrayList<>();
 
     public int getClientId() {

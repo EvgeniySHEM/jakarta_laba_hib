@@ -9,5 +9,6 @@ import java.util.List;
 public interface SelectBeanLocal {
 
     List<AddressEntity> getData(String filterName, String filterType);
+    List<AddressEntity> getSortedData(String filterName, String filterType);
 
 }

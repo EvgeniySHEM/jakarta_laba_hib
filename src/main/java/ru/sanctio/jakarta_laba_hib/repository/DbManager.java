@@ -21,73 +21,116 @@ public class DbManager implements DbManagerLocal {
     @Override
     public boolean checkUser(String login, String password) {
         openEntityManager();
-        Query query = entityManager.createNativeQuery("select * from users " +
-                "where login = '" + login + "' and password = '" + password + "'");
-        List<UsersEntity> user = query.getResultList();
-        closeEntityManager();
-        return user.size() > 0;
+        try {
+            Query query = entityManager.createNativeQuery("select * from users " +
+                    "where login = '" + login + "' and password = '" + password + "'");
+            List<UsersEntity> user = query.getResultList();
+            return user.size() > 0;
+        } finally {
+            closeEntityManager();
+        }
     }
 
     @Override
     public List<ClientEntity> getAllClient() {
         openEntityManager();
-        Query query = entityManager.createNativeQuery("select * from client");
-        List<ClientEntity> clientsList = query.getResultList();
-        closeEntityManager();
-        return clientsList;
+        try {
+            Query query = entityManager.createNativeQuery("select * from client");
+            List<ClientEntity> clientsList = query.getResultList();
+            return clientsList;
+        } finally {
+            closeEntityManager();
+        }
     }
 
     @Override
     public List<AddressEntity> getAllInformation() {
         openEntityManager();
-        Query query = entityManager.createNativeQuery("select * from address", AddressEntity.class);
-        List<AddressEntity> addressList = query.getResultList();
-        System.out.println(addressList);
-        closeEntityManager();
-        return addressList;
+        try {
+            Query query = entityManager.createNativeQuery("select * from address", AddressEntity.class);
+            List<AddressEntity> addressList = query.getResultList();
+            System.out.println(addressList);
+            return addressList;
+        } finally {
+            closeEntityManager();
+        }
     }
 
     @Override
     public List<AddressEntity> getFilteredInformation(String filterName, String filterType) {
         openEntityManager();
-        String sql = "select a.* from client c join address a on c.clientId = a.clientid\n" +
-                "           where c.clientName like '%" + filterName + "%' and c.type = '" + filterType + "'";
-        List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
-        System.out.println(addressList);
-        closeEntityManager();
-        return addressList;
+        try {
+            String sql = "select a.* from client c join address a on c.clientId = a.clientid\n" +
+                    "           where c.clientName like '%" + filterName + "%' and c.type = '" + filterType + "'";
+            List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
+            System.out.println(addressList);
+            return addressList;
+        } finally {
+            closeEntityManager();
+        }
     }
 
     @Override
-    public List<AddressEntity> getFilteredByNameInformation(String filterName) {
+    public List<AddressEntity> getFilteredByNameAndAddressInformation(String filterName) {
         openEntityManager();
-        String sql = "select a.* from client c join address a on c.clientId = a.clientid\n" +
-                "where c.clientName like '%" + filterName + "%'";
-        List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
-        System.out.println(addressList);
-        closeEntityManager();
-        return addressList;
+        try {
+            String sql = "select a.* from client c join address a on c.clientId = a.clientid\n" +
+                    "where c.clientName like '%" + filterName + "%' or a.address like '%" + filterName + "%'";
+            List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
+            System.out.println(addressList);
+            return addressList;
+        } finally {
+            closeEntityManager();
+        }
     }
 
     @Override
     public List<AddressEntity> getFilteredByTypeInformation(String filterType) {
         openEntityManager();
-        String sql = "select a.* from client c join address a on c.clientId = a.clientid\n" +
-                "           where c.type = '" + filterType + "'";
-        List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
-        System.out.println(addressList);
-        closeEntityManager();
-        return addressList;
+        try {
+            String sql = "select a.* from client c join address a on c.clientId = a.clientid\n" +
+                    "           where c.type = '" + filterType + "'";
+            List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
+            System.out.println(addressList);
+            return addressList;
+        } finally {
+            closeEntityManager();
+        }
     }
 
     @Override
     public boolean createNewClient(ClientEntity newClient, AddressEntity newAddress) {
         openEntityManager();
-        newClient = createClientEntity(newClient);
-        newAddress.setClient(newClient);
-        boolean result = createAddressEntity(newAddress);
-        closeEntityManager();
-        return result;
+        try {
+            newClient = createClientEntity(newClient);
+            newAddress.setClient(newClient);
+            return createAddressEntity(newAddress);
+        } finally {
+            closeEntityManager();
+        }
+    }
+
+    @Override
+    public boolean update(ClientEntity client, AddressEntity addressEntity, String clientId) {
+        openEntityManager();
+        try {
+            entityManager.merge(client);
+            entityManager.merge(addressEntity);
+            return true;
+        } finally {
+            closeEntityManager();
+        }
+    }
+
+    @Override
+    public AddressEntity getAddressById(String addressId) {
+        openEntityManager();
+        try {
+            AddressEntity addressEntity = entityManager.find(AddressEntity.class, addressId);
+            return addressEntity;
+        } finally {
+            closeEntityManager();
+        }
     }
 
     private ClientEntity createClientEntity(ClientEntity client) {
@@ -120,52 +163,40 @@ public class DbManager implements DbManagerLocal {
     @Override
     public boolean addClientAddress(AddressEntity newAddress, String clientId) {
         openEntityManager();
-        String sql = "select * from address where ip = '" + newAddress.getIp() + "' and " +
-                "mac = '" + newAddress.getMac() + "' and model = '" + newAddress.getModel() + "' and" +
-                " address = '" + newAddress.getAddress() + "'";
-        List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
-        if (addressList.size() == 0) {
-            String insert = "insert into address(ip,mac,model,address,clientid) values ('"
-                    + newAddress.getIp() + "','" + newAddress.getMac() + "','"
-                    + newAddress.getModel() + "','" + newAddress.getAddress() + "'," + clientId + ")";
-            entityManager.createNativeQuery(insert).executeUpdate();
+        try {
+            String sql = "select * from address where ip = '" + newAddress.getIp() + "' and " +
+                    "mac = '" + newAddress.getMac() + "' and model = '" + newAddress.getModel() + "' and" +
+                    " address = '" + newAddress.getAddress() + "'";
+            List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
+            if (addressList.size() == 0) {
+                ClientEntity client = entityManager.find(ClientEntity.class, clientId);
+                newAddress.setClient(client);
+                entityManager.persist(newAddress);
+                return true;
+            } else {
+                return false;
+            }
+        } finally {
             closeEntityManager();
-            return true;
-        } else {
-            closeEntityManager();
-            return false;
         }
     }
 
     @Override
     public void deleteAddress(String addressId, String clientId) {
         openEntityManager();
-        String deleteAddress = "delete from address where id = " + addressId;
-        String deleteClient = "delete from client where clientid = " + clientId;
-        entityManager.createNativeQuery(deleteAddress).executeUpdate();
-        String checkFK = "select * from address where clientId =" + clientId;
-        List<AddressEntity> addressList = entityManager.createNativeQuery(checkFK, AddressEntity.class).getResultList();
-        if (addressList.size() == 0) {
-            entityManager.createNativeQuery(deleteClient).executeUpdate();
+        try {
+            AddressEntity address = entityManager.find(AddressEntity.class, addressId);
+            entityManager.remove(address);
+            String checkFK = "select * from address where clientId =" + clientId;
+            List<AddressEntity> addressList = entityManager.createNativeQuery(checkFK, AddressEntity.class).getResultList();
+            if (addressList.size() == 0) {
+                ClientEntity client = entityManager.find(ClientEntity.class, clientId);
+                entityManager.remove(client);
+            }
+        } finally {
+            closeEntityManager();
         }
-        closeEntityManager();
     }
-
-//    @Override
-//    public void updateAddress(AddressEntity newAddress) {
-//        openEntityManager();
-//        entityManager.merge(newAddress);
-//        entityManager.flush();
-//        closeEntityManager();
-//    }
-//
-//    @Override
-//    public void updateClient(ClientEntity newClient) {
-//        openEntityManager();
-//        entityManager.merge(newClient);
-//        entityManager.flush();
-//        closeEntityManager();
-//    }
 
 
     private void openEntityManager() {

@@ -15,14 +15,8 @@ public class AuthorizationServlet extends HttpServlet {
     @EJB
     private DbManagerLocal repository;
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String username = request.getParameter("username");
-//        String password = request.getParameter("password");
-
         boolean check = repository.checkUser(request.getParameter("username"), request.getParameter("password"));
         if(check) {
             getServletContext().getRequestDispatcher("/ViewListServlet").forward(request, response);

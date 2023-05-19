@@ -68,7 +68,6 @@ public class CreateServlet extends HttpServlet {
             newAddress.setModel(model);
             newAddress.setAddress(address);
             newClient.addAddress(newAddress);
-//            updateBean.createNewClient(clientName,selectType,date,ip,mac,model,address);
         } catch (NullPointerException | IllegalArgumentException ex) {
             response.sendError(490, ex.getMessage());
         }

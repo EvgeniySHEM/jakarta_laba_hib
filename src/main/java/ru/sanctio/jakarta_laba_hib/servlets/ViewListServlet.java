@@ -12,13 +12,10 @@ import ru.sanctio.jakarta_laba_hib.entity.AddressEntity;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "ViewListServlet", value = "/ViewListServlet")
 public class ViewListServlet extends HttpServlet {
-//    @EJB
-//    private DbManagerLocal repository;
     @EJB
     private SelectBeanLocal selectBean;
 
@@ -38,9 +35,7 @@ public class ViewListServlet extends HttpServlet {
         String filterName = request.getParameter("filter");
         String filterType = request.getParameter("select");
 
-        List<AddressEntity> filteredList = selectBean.getData(filterName, filterType);
-//        List<AddressEntity> filteredList = getFilteredList(addressList, filterName, filterType);
-//        filteredList.sort((a, b) -> a.getClient().getClientId() - b.getClient().getClientId());
+        List<AddressEntity> filteredList = selectBean.getSortedData(filterName, filterType);
 
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
@@ -83,8 +78,9 @@ public class ViewListServlet extends HttpServlet {
             out.println("<td>" + address.getMac() + "</td>");
             out.println("<td>" + address.getModel() + "</td>");
             out.println("<td>" + address.getAddress() + "</td>");
-            out.println("<td><form action=\"UpdateClient.jsp\" method=\"get\" align=\"center\">");
-            out.println("<input type=\"hidden\" name=\"hidden\" value=\"" + address.getClient().getClientId() + "\">");
+            out.println("<td><form action=\"UpdateServlet\" method=\"get\" align=\"center\">");
+            out.println("<input type=\"hidden\" name=\"clientId\" value=\"" + address.getClient().getClientId() + "\">");
+            out.println("<input type=\"hidden\" name=\"addressId\" value=\"" + address.getId() + "\">");
             out.println("<input type=\"submit\" value=\"Update\"></form></td>");
             out.println("<td><form action=\"Delete\" method=\"get\" align=\"center\">");
             out.println("<input type=\"hidden\" name=\"addressId\" value=\"" + address.getId() + "\">");
@@ -98,31 +94,4 @@ public class ViewListServlet extends HttpServlet {
         out.println("</table>");
         out.println("</body></html>");
     }
-
-//    private List<AddressEntity> getFilteredList(List<AddressEntity> addressList, String filterName, String filterType) {
-//        List<AddressEntity> list = new ArrayList<>();
-//        if (filterName != null && !filterName.isEmpty()) {
-//            for (AddressEntity address : addressList) {
-//                if(filterType != null && !filterType.isEmpty()) {
-//                    if ((address.getClient().getClientName().contains(filterName)
-//                            || address.getAddress().contains(filterName))
-//                            && address.getClient().getType().equals(filterType)) {
-//                        list.add(address);
-//                    }
-//                } else if (address.getClient().getClientName().contains(filterName)
-//                        || address.getAddress().contains(filterName)){
-//                    list.add(address);
-//                }
-//            }
-//        } else if (filterType != null && !filterType.isEmpty()) {
-//            for (AddressEntity address : addressList) {
-//                if (address.getClient().getType().equals(filterType)) {
-//                    list.add(address);
-//                }
-//            }
-//        } else {
-//            return addressList;
-//        }
-//        return list;
-//    }
 }

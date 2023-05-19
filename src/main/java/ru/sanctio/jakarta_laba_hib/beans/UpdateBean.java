@@ -11,33 +11,9 @@ public class UpdateBean implements UpdateBeanLocal{
     @EJB
     private DbManagerLocal repository;
 
-//    @Override
-//    public void createNewClient(String clientName, String selectType, String date,
-//                                String ip, String mac, String model, String address)
-//                                throws IllegalArgumentException, NullPointerException {
-//        ClientEntity newClient = new ClientEntity();
-//        AddressEntity newAddress = new AddressEntity();
-//        newClient.setClientName(clientName);
-//        newClient.setType(selectType);
-//        newClient.setAdded(date);
-//        newAddress.setIp(ip);
-//        newAddress.setMac(mac);
-//        newAddress.setModel(model);
-//        newAddress.setAddress(address);
-//        newClient.addAddress(newAddress);
-//
-//        newClient = repository.createClientEntity(newClient);
-//
-//        newAddress.setClient(newClient);
-//        repository.createAddressEntity(newAddress);
-//    }
-
     @Override
     public boolean createNewClient(ClientEntity newClient, AddressEntity newAddress) {
         return repository.createNewClient(newClient, newAddress);
-//        newClient = repository.createClientEntity(newClient);
-//        newAddress.setClient(newClient);
-//        repository.createAddressEntity(newAddress);
     }
 
     @Override
@@ -48,5 +24,15 @@ public class UpdateBean implements UpdateBeanLocal{
     @Override
     public void delete(String addressId, String clientId) {
         repository.deleteAddress(addressId, clientId);
+    }
+
+    @Override
+    public boolean update(ClientEntity client, AddressEntity addressEntity, String clientId) {
+        return repository.update(client, addressEntity, clientId);
+    }
+
+    @Override
+    public AddressEntity selectAddress(String addressId) {
+        return repository.getAddressById(addressId);
     }
 }

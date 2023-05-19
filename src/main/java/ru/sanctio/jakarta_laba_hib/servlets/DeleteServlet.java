@@ -19,9 +19,4 @@ public class DeleteServlet extends HttpServlet {
         updateBean.delete(addressId, clientId);
         response.sendRedirect("ViewListServlet");
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 }
