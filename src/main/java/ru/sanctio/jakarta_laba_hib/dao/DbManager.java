@@ -1,4 +1,4 @@
-package ru.sanctio.jakarta_laba_hib.repository;
+package ru.sanctio.jakarta_laba_hib.dao;
 
 import jakarta.ejb.Singleton;
 import jakarta.persistence.EntityManager;
@@ -32,18 +32,6 @@ public class DbManager implements DbManagerLocal {
     }
 
     @Override
-    public List<ClientEntity> getAllClient() {
-        openEntityManager();
-        try {
-            Query query = entityManager.createNativeQuery("select * from client");
-            List<ClientEntity> clientsList = query.getResultList();
-            return clientsList;
-        } finally {
-            closeEntityManager();
-        }
-    }
-
-    @Override
     public List<AddressEntity> getAllInformation() {
         openEntityManager();
         try {
@@ -61,7 +49,8 @@ public class DbManager implements DbManagerLocal {
         openEntityManager();
         try {
             String sql = "select a.* from client c join address a on c.clientId = a.clientid\n" +
-                    "           where c.clientName like '%" + filterName + "%' and c.type = '" + filterType + "'";
+                    "           where (c.clientName like '%" + filterName + "%' or a.address like '%" + filterName + "%')" +
+                    "and c.type = '" + filterType + "'";
             List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
             System.out.println(addressList);
             return addressList;
@@ -111,7 +100,7 @@ public class DbManager implements DbManagerLocal {
     }
 
     @Override
-    public boolean update(ClientEntity client, AddressEntity addressEntity, String clientId) {
+    public boolean update(ClientEntity client, AddressEntity addressEntity) {
         openEntityManager();
         try {
             entityManager.merge(client);
@@ -128,6 +117,19 @@ public class DbManager implements DbManagerLocal {
         try {
             AddressEntity addressEntity = entityManager.find(AddressEntity.class, addressId);
             return addressEntity;
+        } finally {
+            closeEntityManager();
+        }
+    }
+
+    @Override
+    public List<ClientEntity> getAllClient() {
+        openEntityManager();
+        try {
+            List<ClientEntity> clients =
+                    entityManager.createNativeQuery("select * from client", ClientEntity.class).getResultList();
+            System.out.println(clients);
+            return clients;
         } finally {
             closeEntityManager();
         }

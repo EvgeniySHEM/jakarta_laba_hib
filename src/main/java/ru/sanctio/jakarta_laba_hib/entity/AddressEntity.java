@@ -1,6 +1,7 @@
 package ru.sanctio.jakarta_laba_hib.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 
@@ -26,6 +27,21 @@ public class AddressEntity implements Serializable {
     @JoinColumn(name = "clientid")
     @ManyToOne(fetch = FetchType.EAGER)
     private ClientEntity client;
+
+    public AddressEntity() {
+    }
+
+    public AddressEntity(String ip, String mac, String model, String address) {
+        setIp(ip);
+        setMac(mac);
+        setModel(model);
+        setAddress(address);
+    }
+
+    public AddressEntity(int id, String ip, String mac, String model, String address) {
+        this(ip,mac,model,address);
+        setId(id);
+    }
 
     public int getId() {
         return id;

@@ -39,12 +39,8 @@ public class ViewListServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         out.println("<html><body>");
-        out.println("<table align=\"center\" cellpadding=\"5\" cellspacing=\"0\">");
-        out.println("<tr>");
-        out.println("<td><form action=\"Registration.jsp\" method=\"get\" align=\"center\" autocomplete=\"off\">" +
-                "<input type=\"submit\" value=\"Registration new client\"></form></td>");
-        out.println("</tr>");
-        out.println("</table>");
+        out.println("<form action=\"Registration.jsp\" method=\"get\" align=\"center\" autocomplete=\"off\">" +
+                "<input type=\"submit\" value=\"Registration new client\"></form>");
         out.println("<form action=\"ViewListServlet\" method=\"get\" align=\"center\">");
         out.println("<p><input type=\"text\" name=\"filter\" placeholder=\"filter clientName/address\">");
         out.println("<select name=\"select\">");
@@ -54,6 +50,16 @@ public class ViewListServlet extends HttpServlet {
         out.println("</select>");
         out.println("<input type=\"submit\" value=\"Filter\"></p>");
         out.println("</form>");
+
+        out.println("<form action=\"CheckDOM\" method=\"get\" align=\"center\">");
+        out.println("<p><input type=\"text\" name=\"xmlFile\" placeholder=\"xml file\">");
+        out.println("<input type=\"text\" name=\"filterXML\" placeholder=\"filter clientName\">");
+        out.println("<input type=\"submit\" value=\"CheckDOM\"></p></form>");
+        out.println("<form action=\"CheckSAX\" method=\"get\" align=\"center\">");
+        out.println("<p><input type=\"text\" name=\"xmlFile\" placeholder=\"xml file\">");
+        out.println("<input type=\"text\" name=\"filterXML\" placeholder=\"filter clientName\">");
+        out.println("<input type=\"submit\" value=\"CheckSAX\"></p></form>");
+
         out.println("<table align=\"center\" cellpadding=\"5\" border=\"5px double #000\" cellspacing=\"0\">");
         out.println("<tr>");
         out.println("<th>clientId</th>");
@@ -79,16 +85,15 @@ public class ViewListServlet extends HttpServlet {
             out.println("<td>" + address.getModel() + "</td>");
             out.println("<td>" + address.getAddress() + "</td>");
             out.println("<td><form action=\"UpdateServlet\" method=\"get\" align=\"center\">");
-            out.println("<input type=\"hidden\" name=\"clientId\" value=\"" + address.getClient().getClientId() + "\">");
             out.println("<input type=\"hidden\" name=\"addressId\" value=\"" + address.getId() + "\">");
             out.println("<input type=\"submit\" value=\"Update\"></form></td>");
             out.println("<td><form action=\"Delete\" method=\"get\" align=\"center\">");
             out.println("<input type=\"hidden\" name=\"addressId\" value=\"" + address.getId() + "\">");
             out.println("<input type=\"hidden\" name=\"clientId\" value=\"" + address.getClient().getClientId() + "\">");
-            out.println("<form><input type=\"submit\" value=\"Delete\"></form></td>");
+            out.println("<input type=\"submit\" value=\"Delete\"></form></td>");
             out.println("<td><form action=\"AddClientAddress.jsp\" method=\"get\" align=\"center\">");
             out.println("<input type=\"hidden\" name=\"hidden\" value=\"" + address.getClient().getClientId() + "\">");
-            out.println("<form><input type=\"submit\" value=\"Add address\"></form></td>");
+            out.println("<input type=\"submit\" value=\"Add address\"></form></td>");
             out.println("</tr>");
         }
         out.println("</table>");

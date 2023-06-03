@@ -1,6 +1,7 @@
 package ru.sanctio.jakarta_laba_hib.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -29,8 +30,22 @@ public class ClientEntity implements Serializable {
     @Basic
     @Column(name = "added")
     private Date added;
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private List<AddressEntity> addresses = new ArrayList<>();
+
+    public ClientEntity() {
+    }
+
+    public ClientEntity(String clientName, String type, String added) {
+        setClientName(clientName);
+        setType(type);
+        setAdded(added);
+    }
+
+    public ClientEntity(int clientid, String clientName, String type, String added) {
+        this(clientName, type, added);
+        setClientId(clientid);
+    }
 
     public int getClientId() {
         return clientid;
@@ -117,7 +132,7 @@ public class ClientEntity implements Serializable {
     public String toString() {
         return "ClientEntity{" +
                 "clientid=" + clientid +
-                ", clientname='" + clientName + '\'' +
+                ", clientName='" + clientName + '\'' +
                 ", type='" + type + '\'' +
                 ", added=" + added +
                 '}';

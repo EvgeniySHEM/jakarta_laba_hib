@@ -1,4 +1,4 @@
-package ru.sanctio.jakarta_laba_hib.repository;
+package ru.sanctio.jakarta_laba_hib.dao;
 
 import jakarta.ejb.Local;
 import ru.sanctio.jakarta_laba_hib.entity.AddressEntity;
@@ -21,7 +21,10 @@ public interface DbManagerLocal {
 
     boolean createNewClient(ClientEntity newClient, AddressEntity newAddress);
 
-    boolean update(ClientEntity client, AddressEntity addressEntity, String clientId);
+    boolean update(ClientEntity client, AddressEntity addressEntity);
 
     AddressEntity getAddressById(String addressId);
+
+    List<ClientEntity> getAllClient();
+
 }

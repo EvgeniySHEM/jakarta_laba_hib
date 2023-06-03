@@ -4,7 +4,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import ru.sanctio.jakarta_laba_hib.entity.AddressEntity;
 import ru.sanctio.jakarta_laba_hib.entity.ClientEntity;
-import ru.sanctio.jakarta_laba_hib.repository.DbManagerLocal;
+import ru.sanctio.jakarta_laba_hib.dao.DbManagerLocal;
 
 @Stateless
 public class UpdateBean implements UpdateBeanLocal{
@@ -27,8 +27,8 @@ public class UpdateBean implements UpdateBeanLocal{
     }
 
     @Override
-    public boolean update(ClientEntity client, AddressEntity addressEntity, String clientId) {
-        return repository.update(client, addressEntity, clientId);
+    public boolean update(ClientEntity client, AddressEntity addressEntity) {
+        return repository.update(client, addressEntity);
     }
 
     @Override

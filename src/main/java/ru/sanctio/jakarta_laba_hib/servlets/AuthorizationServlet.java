@@ -6,14 +6,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.sanctio.jakarta_laba_hib.repository.DbManagerLocal;
+import ru.sanctio.jakarta_laba_hib.dao.DbManagerLocal;
 
 import java.io.IOException;
 
-@WebServlet(name = "AuthorizationServlet", value = "/Authorization-servlet")
+@WebServlet(name = "AuthorizationServlet", value = "/AuthorizationServlet")
 public class AuthorizationServlet extends HttpServlet {
     @EJB
     private DbManagerLocal repository;
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

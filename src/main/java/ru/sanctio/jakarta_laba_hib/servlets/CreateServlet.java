@@ -6,9 +6,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.sanctio.jakarta_laba_hib.beans.UpdateBeanLocal;
 import ru.sanctio.jakarta_laba_hib.entity.AddressEntity;
 import ru.sanctio.jakarta_laba_hib.entity.ClientEntity;
-import ru.sanctio.jakarta_laba_hib.beans.UpdateBeanLocal;
 
 import java.io.IOException;
 
@@ -16,6 +16,7 @@ import java.io.IOException;
 public class CreateServlet extends HttpServlet {
     @EJB
     private UpdateBeanLocal updateBean;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
@@ -25,23 +26,19 @@ public class CreateServlet extends HttpServlet {
         String model = request.getParameter("model");
         String address = request.getParameter("address");
 
-        AddressEntity newAddress = new AddressEntity();
+        AddressEntity newAddress = null;
         try {
-            newAddress.setIp(ip);
-            newAddress.setMac(mac);
-            newAddress.setModel(model);
-            newAddress.setAddress(address);
+            newAddress = new AddressEntity(ip, mac, model, address);
         } catch (NullPointerException | IllegalArgumentException ex) {
             response.sendError(490, ex.getMessage());
         }
-        if(!response.isCommitted()) {
-            if(updateBean.addClientAddress(newAddress, clientId)) {
+        if (!response.isCommitted()) {
+            if (updateBean.addClientAddress(newAddress, clientId)) {
                 response.sendRedirect("ViewListServlet");
             } else {
                 response.sendError(490, "Такой адрес уже есть в базе данных");
             }
         }
-
     }
 
     @Override
@@ -57,22 +54,17 @@ public class CreateServlet extends HttpServlet {
         String model = request.getParameter("model");
         String address = request.getParameter("address");
 
-        ClientEntity newClient = new ClientEntity();
-        AddressEntity newAddress = new AddressEntity();
+        ClientEntity newClient = null;
+        AddressEntity newAddress = null;
         try {
-            newClient.setClientName(clientName);
-            newClient.setType(selectType);
-            newClient.setAdded(date);
-            newAddress.setIp(ip);
-            newAddress.setMac(mac);
-            newAddress.setModel(model);
-            newAddress.setAddress(address);
+            newClient = new ClientEntity(clientName, selectType, date);
+            newAddress = new AddressEntity(ip, mac, model, address);
             newClient.addAddress(newAddress);
         } catch (NullPointerException | IllegalArgumentException ex) {
             response.sendError(490, ex.getMessage());
         }
-        if(!response.isCommitted()) {
-            if(updateBean.createNewClient(newClient, newAddress)) {
+        if (!response.isCommitted()) {
+            if (updateBean.createNewClient(newClient, newAddress)) {
                 response.sendRedirect("ViewListServlet");
             } else {
                 response.sendError(490, "Клиент с таким адресом уже есть в базе данных");

@@ -6,8 +6,6 @@ import ru.sanctio.jakarta_laba_hib.entity.ClientEntity;
 
 @Local
 public interface UpdateBeanLocal {
-//    void createNewClient(String clientName, String selectType, String date, String ip, String mac,
-//                         String model, String address);
 
     boolean createNewClient(ClientEntity newClient, AddressEntity newAddress);
 
@@ -15,7 +13,7 @@ public interface UpdateBeanLocal {
 
     void delete(String addressId, String clientId);
 
-    boolean update(ClientEntity client, AddressEntity addressEntity, String clientId);
+    boolean update(ClientEntity client, AddressEntity addressEntity);
 
     AddressEntity selectAddress(String addressId);
 }
