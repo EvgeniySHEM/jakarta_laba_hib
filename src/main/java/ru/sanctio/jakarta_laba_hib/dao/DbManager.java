@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import org.hibernate.SessionFactory;
 import ru.sanctio.jakarta_laba_hib.entity.AddressEntity;
 import ru.sanctio.jakarta_laba_hib.entity.ClientEntity;
 import ru.sanctio.jakarta_laba_hib.entity.UsersEntity;
@@ -144,6 +145,17 @@ public class DbManager implements DbManagerLocal {
 //                    entityManager.createNativeQuery("select * from client", ClientEntity.class).getResultList();
             System.out.println(client);
             return client;
+        } finally {
+            closeEntityManager();
+        }
+    }
+
+    @Override
+    public void deleteClient(String id) {
+        openEntityManager();
+        try {
+        ClientEntity client = entityManager.find(ClientEntity.class, id);
+        entityManager.remove(client);
         } finally {
             closeEntityManager();
         }

@@ -28,4 +28,6 @@ public interface DbManagerLocal {
     List<ClientEntity> getAllClient();
 
     ClientEntity getClientById(Integer id);
+
+    void deleteClient(String id);
 }
