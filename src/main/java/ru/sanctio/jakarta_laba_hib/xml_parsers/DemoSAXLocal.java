@@ -8,4 +8,5 @@ import java.util.List;
 @Local
 public interface DemoSAXLocal {
     List<ClientEntity> getClients();
+
 }

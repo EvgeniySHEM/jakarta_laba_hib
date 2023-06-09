@@ -25,5 +25,5 @@ public interface SelectBeanLocal {
 
     List<ClientEntity> readXMLSAX(String xmlFile, String filterXML);
 
-    void checkListSize(List<ClientEntity> clients, HttpServletResponse response) throws IOException;
+    boolean checkClients(List<ClientEntity> clients, HttpServletResponse response) throws IOException;
 }

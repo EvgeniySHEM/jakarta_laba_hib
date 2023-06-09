@@ -14,6 +14,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class DemoDOM implements DemoDOMLocal{
 
     public List<ClientEntity> readFile(String xmlFile, String filterXML){
         File file = new File("/Users/evgeniysharychenkov/IdeaProjects/jakarta_laba_hib/" + xmlFile);
-        List<ClientEntity> clients = new LinkedList<>();
+        List<ClientEntity> clients = new ArrayList<>();
         try{
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();

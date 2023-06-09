@@ -2,10 +2,13 @@ package ru.sanctio.jakarta_laba_hib.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 import java.io.Serializable;
 
 @Entity
+@XmlRootElement
 @Table(name = "address", schema = "public", catalog = "jakarta")
 public class AddressEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -110,6 +113,8 @@ public class AddressEntity implements Serializable {
             throw new IllegalArgumentException("The address length should not exceed 200 characters");
         this.address = address;
     }
+
+
     public ClientEntity getClient() {
         return client;
     }

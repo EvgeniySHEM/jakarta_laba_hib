@@ -24,7 +24,7 @@ public class Transformer implements TransformerLocal {
     @EJB
     private SelectBeanLocal selectBean;
 
-    public void createXml(String xmlFile) {
+    public boolean createXml(String xmlFile) {
         File file = new File("/Users/evgeniysharychenkov/IdeaProjects/jakarta_laba_hib/" + xmlFile);
 
         try {
@@ -65,5 +65,6 @@ public class Transformer implements TransformerLocal {
         } catch (ParserConfigurationException | TransformerException e) {
             e.printStackTrace();
         }
+        return false;
     }
 }

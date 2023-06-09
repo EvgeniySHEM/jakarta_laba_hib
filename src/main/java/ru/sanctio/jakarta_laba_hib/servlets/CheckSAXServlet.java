@@ -25,7 +25,9 @@ public class CheckSAXServlet extends HttpServlet {
         String xmlFile = request.getParameter("xmlFile");
 
         List<ClientEntity> clients = selectBean.readXMLSAX(xmlFile, filterXML);
-        selectBean.checkListSize(clients, response);
+        if(selectBean.checkClients(clients, response)) {
+            return;
+        }
 
         PrintWriter out = response.getWriter();
         out.println("<html><body>");

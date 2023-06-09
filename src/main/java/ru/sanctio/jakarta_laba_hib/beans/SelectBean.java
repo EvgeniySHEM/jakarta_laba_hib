@@ -4,8 +4,8 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.servlet.http.HttpServletResponse;
 import org.xml.sax.SAXException;
-import ru.sanctio.jakarta_laba_hib.entity.AddressEntity;
 import ru.sanctio.jakarta_laba_hib.dao.DbManagerLocal;
+import ru.sanctio.jakarta_laba_hib.entity.AddressEntity;
 import ru.sanctio.jakarta_laba_hib.entity.ClientEntity;
 import ru.sanctio.jakarta_laba_hib.xml_parsers.DemoDOMLocal;
 import ru.sanctio.jakarta_laba_hib.xml_parsers.DemoSAX;
@@ -61,32 +61,47 @@ public class SelectBean implements SelectBeanLocal {
 
     @Override
     public List<ClientEntity> readXML(String xmlFile, String filterXML) {
-        transformer.createXml(xmlFile);
-        return demoDOM.readFile(xmlFile, filterXML);
+        File file = new File("/Users/evgeniysharychenkov/IdeaProjects/jakarta_laba_hib/" + xmlFile);
+        List<ClientEntity> clients = null;
+        if (file.exists()) {
+            transformer.createXml(xmlFile);
+            clients = demoDOM.readFile(xmlFile, filterXML);
+            return clients;
+        } else {
+            return clients;
+        }
     }
 
     @Override
     public List<ClientEntity> readXMLSAX(String xmlFile, String filterXML) {
         File file = new File("/Users/evgeniysharychenkov/IdeaProjects/jakarta_laba_hib/" + xmlFile);
-        transformer.createXml(xmlFile);
         List<ClientEntity> clients = null;
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        try {
-            SAXParser parser = factory.newSAXParser();
-            DemoSAX sax = new DemoSAX();
-            sax.setFilter(filterXML);
-            parser.parse(file, sax);
-            clients = sax.getClients();
-        } catch (ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();
+        if (file.exists()) {
+            transformer.createXml(xmlFile);
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            try {
+                SAXParser parser = factory.newSAXParser();
+                DemoSAX sax = new DemoSAX();
+                sax.setFilter(filterXML);
+                parser.parse(file, sax);
+                clients = sax.getClients();
+            } catch (ParserConfigurationException | IOException | SAXException e) {
+                e.printStackTrace();
+            }
         }
         return clients;
     }
 
     @Override
-    public void checkListSize(List<ClientEntity> clients, HttpServletResponse response) throws IOException {
-        if(clients.size() == 0) {
+    public boolean checkClients(List<ClientEntity> clients, HttpServletResponse response) throws IOException {
+        if (clients == null) {
+            response.sendError(499, "Данный xml файл не найден");
+            return true;
+        } else if (clients.size() == 0) {
             response.sendError(499, "Объекты, удовлетворяющие условиям поиска, отсутствуют");
+            return true;
+        } else {
+            return false;
         }
     }
 

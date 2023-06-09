@@ -51,14 +51,23 @@ public class ViewListServlet extends HttpServlet {
         out.println("<input type=\"submit\" value=\"Filter\"></p>");
         out.println("</form>");
 
+        out.println("<form action=\"CreateXMLServlet\" method=\"post\" align=\"center\" autocomplete=\"off\">" +
+                "<p><label>Create xml file</label>");
+        out.println("<input type=\"text\" name=\"xmlName\" required autocomplete=\"off\" pattern=\"\\w+.xml$\"\n" +
+                "title=\"Файл в формате xml\">");
+        out.println("<input type=\"submit\" value=\"Create\"></p></form>");
+
         out.println("<form action=\"CheckDOM\" method=\"get\" align=\"center\">");
-        out.println("<p><input type=\"text\" name=\"xmlFile\" placeholder=\"xml file\">");
+        out.println("<p><input type=\"text\" name=\"xmlFile\" placeholder=\"xml file\"" +
+                "pattern=\"\\w+.xml$\" required autocomplete=\"off\" title=\"Файл в формате xml\">");
         out.println("<input type=\"text\" name=\"filterXML\" placeholder=\"filter clientName\">");
-        out.println("<input type=\"submit\" value=\"CheckDOM\"></p></form>");
+        out.println("<input type=\"submit\" value=\"DOM\"></p></form>");
+
         out.println("<form action=\"CheckSAX\" method=\"get\" align=\"center\">");
-        out.println("<p><input type=\"text\" name=\"xmlFile\" placeholder=\"xml file\">");
+        out.println("<p><input type=\"text\" name=\"xmlFile\" placeholder=\"xml file\"" +
+                "pattern=\"\\w+.xml$\" required autocomplete=\"off\" title=\"Файл в формате xml\">");
         out.println("<input type=\"text\" name=\"filterXML\" placeholder=\"filter clientName\">");
-        out.println("<input type=\"submit\" value=\"CheckSAX\"></p></form>");
+        out.println("<input type=\"submit\" value=\"SAX\"></p></form>");
 
         out.println("<table align=\"center\" cellpadding=\"5\" border=\"5px double #000\" cellspacing=\"0\">");
         out.println("<tr>");

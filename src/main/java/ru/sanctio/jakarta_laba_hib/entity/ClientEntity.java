@@ -2,6 +2,7 @@ package ru.sanctio.jakarta_laba_hib.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
 import java.sql.Date;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Entity
+@XmlRootElement
 @Table(name = "client", schema = "public", catalog = "jakarta")
 @NamedQueries({
         @NamedQuery(name = "Client.All", query = "select c from ClientEntity c")
@@ -29,7 +31,7 @@ public class ClientEntity implements Serializable {
     private String type;
     @Basic
     @Column(name = "added")
-    private Date added;
+    private LocalDate added;
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private List<AddressEntity> addresses = new ArrayList<>();
 
@@ -83,7 +85,7 @@ public class ClientEntity implements Serializable {
         this.type = type;
     }
 
-    public Date getAdded() {
+    public LocalDate getAdded() {
         return added;
     }
 
@@ -91,8 +93,10 @@ public class ClientEntity implements Serializable {
         LocalDate localDate = LocalDate.parse(date);
         if (localDate.isBefore(LocalDate.EPOCH) || localDate.isAfter(LocalDate.now()))
             throw new IllegalArgumentException("You entered an incorrect year");
-        this.added = Date.valueOf(localDate);
+//        this.added = Date.valueOf(localDate);
+        this.added = localDate;
     }
+
     public List<AddressEntity> getAddresses() {
         return addresses;
     }

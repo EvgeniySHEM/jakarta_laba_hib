@@ -4,5 +4,5 @@ import jakarta.ejb.Local;
 
 @Local
 public interface TransformerLocal {
-    void createXml(String xmlFile);
+    boolean createXml(String xmlFile);
 }

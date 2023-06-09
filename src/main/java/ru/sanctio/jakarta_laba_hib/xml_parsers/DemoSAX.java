@@ -1,5 +1,6 @@
 package ru.sanctio.jakarta_laba_hib.xml_parsers;
 
+import jakarta.ejb.Singleton;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
