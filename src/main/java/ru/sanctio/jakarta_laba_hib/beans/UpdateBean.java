@@ -28,7 +28,7 @@ public class UpdateBean implements UpdateBeanLocal{
 
     @Override
     public boolean update(ClientEntity client, AddressEntity addressEntity) {
-        return repository.update(client, addressEntity);
+        return repository.updateClient(client, addressEntity);
     }
 
     @Override

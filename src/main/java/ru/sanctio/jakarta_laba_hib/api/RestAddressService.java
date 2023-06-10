@@ -31,6 +31,19 @@ public class RestAddressService {
         return dbManager.getAllInformation();
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_XML)
+    @Path("{clientId}")
+    public void addAddress(AddressEntity address, @PathParam("clientId") String clientId) {
+        dbManager.addClientAddress(address, clientId);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_XML)
+    public void update(AddressEntity address) {
+        dbManager.updateAddress(address);
+    }
+
     @DELETE
     @Path("{idAdr}/{idCl}")
     public void delete(@PathParam("idAdr") String idAdr, @PathParam("idCl") String idCl) {

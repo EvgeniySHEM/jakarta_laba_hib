@@ -21,7 +21,11 @@ public interface DbManagerLocal {
 
     boolean createNewClient(ClientEntity newClient, AddressEntity newAddress);
 
-    boolean update(ClientEntity client, AddressEntity addressEntity);
+    void createNewClient(ClientEntity client);
+
+    boolean updateClient(ClientEntity client, AddressEntity addressEntity);
+    void updateAddress(AddressEntity address);
+    void updateClient(ClientEntity client);
 
     AddressEntity getAddressById(String addressId);
 

@@ -32,7 +32,7 @@ public class ClientEntity implements Serializable {
     @Basic
     @Column(name = "added")
     private LocalDate added;
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<AddressEntity> addresses = new ArrayList<>();
 
     public ClientEntity() {

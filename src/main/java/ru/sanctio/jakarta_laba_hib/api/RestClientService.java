@@ -2,7 +2,6 @@ package ru.sanctio.jakarta_laba_hib.api;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import ru.sanctio.jakarta_laba_hib.dao.DbManagerLocal;
@@ -25,9 +24,21 @@ public class RestClientService {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    @Transactional
+//    @Transactional
     public List<ClientEntity> getAllClients() {
         return dbManager.getAllClient();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_XML)
+    public void createNewClient(ClientEntity client) {
+        dbManager.createNewClient(client);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_XML)
+    public void update(ClientEntity client) {
+        dbManager.updateClient(client);
     }
 
     @DELETE

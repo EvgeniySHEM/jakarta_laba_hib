@@ -5,8 +5,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
-import jakarta.transaction.Transactional;
-import org.hibernate.SessionFactory;
 import ru.sanctio.jakarta_laba_hib.entity.AddressEntity;
 import ru.sanctio.jakarta_laba_hib.entity.ClientEntity;
 import ru.sanctio.jakarta_laba_hib.entity.UsersEntity;
@@ -101,13 +99,77 @@ public class DbManager implements DbManagerLocal {
         }
     }
 
+    private ClientEntity createClientEntity(ClientEntity client) {
+        String sql = "select * from client where clientName = '" + client.getClientName() + "' and" +
+                " type = '" + client.getType() + "' and added = '" + client.getAdded() + "'";
+        Query nativeQuery = entityManager.createNativeQuery(sql, ClientEntity.class);
+        List<ClientEntity> clientList = nativeQuery.getResultList();
+        if (clientList.size() > 0) {
+            client = clientList.get(0);
+        } else {
+            client = entityManager.merge(client);
+        }
+        return client;
+    }
+
+    private boolean createAddressEntity(AddressEntity address) {
+        String sql = "select * from address where ip = '" + address.getIp() + "' and " +
+                "mac = '" + address.getMac() + "' and model = '" + address.getModel() + "' and" +
+                " address = '" + address.getAddress() + "'";
+        List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
+        System.out.println(addressList.size());
+        if (addressList.size() > 0) {
+            entityManager.getTransaction().rollback();
+            return false;
+        } else {
+            entityManager.persist(address);
+            return true;
+        }
+    }
+
     @Override
-    public boolean update(ClientEntity client, AddressEntity addressEntity) {
+    public void createNewClient(ClientEntity client) {
+        openEntityManager();
+        try {
+            String sql = "select * from client where clientName = '" + client.getClientName() + "' and" +
+                    " type = '" + client.getType() + "'";
+            Query nativeQuery = entityManager.createNativeQuery(sql, ClientEntity.class);
+            List<ClientEntity> clientList = nativeQuery.getResultList();
+            if (clientList.size() == 0) {
+                entityManager.persist(client);
+            }
+        } finally {
+            closeEntityManager();
+        }
+    }
+
+    @Override
+    public boolean updateClient(ClientEntity client, AddressEntity addressEntity) {
         openEntityManager();
         try {
             entityManager.merge(client);
             entityManager.merge(addressEntity);
             return true;
+        } finally {
+            closeEntityManager();
+        }
+    }
+
+    @Override
+    public void updateAddress(AddressEntity address) {
+        openEntityManager();
+        try {
+            entityManager.merge(address);
+        } finally {
+            closeEntityManager();
+        }
+    }
+
+    @Override
+    public void updateClient(ClientEntity client) {
+        openEntityManager();
+        try {
+            entityManager.merge(client);
         } finally {
             closeEntityManager();
         }
@@ -142,7 +204,6 @@ public class DbManager implements DbManagerLocal {
         openEntityManager();
         try {
             ClientEntity client = entityManager.find(ClientEntity.class, id);
-//                    entityManager.createNativeQuery("select * from client", ClientEntity.class).getResultList();
             System.out.println(client);
             return client;
         } finally {
@@ -154,37 +215,10 @@ public class DbManager implements DbManagerLocal {
     public void deleteClient(String id) {
         openEntityManager();
         try {
-        ClientEntity client = entityManager.find(ClientEntity.class, id);
-        entityManager.remove(client);
+            ClientEntity client = entityManager.find(ClientEntity.class, id);
+            entityManager.remove(client);
         } finally {
             closeEntityManager();
-        }
-    }
-
-    private ClientEntity createClientEntity(ClientEntity client) {
-        String sql = "select * from client where clientName = '" + client.getClientName() + "' and" +
-                " type = '" + client.getType() + "' and added = '" + client.getAdded() + "'";
-        Query nativeQuery = entityManager.createNativeQuery(sql, ClientEntity.class);
-        List<ClientEntity> clientList = nativeQuery.getResultList();
-        if (clientList.size() > 0) {
-            client = clientList.get(0);
-        } else {
-            client = entityManager.merge(client);
-        }
-        return client;
-    }
-
-    private boolean createAddressEntity(AddressEntity address) {
-        String sql = "select * from address where ip = '" + address.getIp() + "' and " +
-                "mac = '" + address.getMac() + "' and model = '" + address.getModel() + "' and" +
-                " address = '" + address.getAddress() + "'";
-        List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
-        if (addressList.size() > 0) {
-            entityManager.getTransaction().rollback();
-            return false;
-        } else {
-            entityManager.persist(address);
-            return true;
         }
     }
 

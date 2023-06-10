@@ -28,7 +28,7 @@ public class AddressEntity implements Serializable {
     @Column(name = "address")
     private String address;
     @JoinColumn(name = "clientid")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private ClientEntity client;
 
     public AddressEntity() {
