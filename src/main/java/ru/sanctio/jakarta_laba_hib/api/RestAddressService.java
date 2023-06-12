@@ -26,7 +26,7 @@ public class RestAddressService {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    @Transactional
+//    @Transactional
     public List<AddressEntity> getAllAddress() {
         return dbManager.getAllInformation();
     }

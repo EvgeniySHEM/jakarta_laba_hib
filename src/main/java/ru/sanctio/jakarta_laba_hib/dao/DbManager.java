@@ -15,7 +15,7 @@ import java.util.List;
 public class DbManager implements DbManagerLocal {
     //    @PersistenceContext
 //    private EntityManager entityManager;
-    private EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");;
     private EntityManager entityManager;
 
     @Override
@@ -232,6 +232,7 @@ public class DbManager implements DbManagerLocal {
             List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
             if (addressList.size() == 0) {
                 ClientEntity client = entityManager.find(ClientEntity.class, clientId);
+                System.out.println(client);
                 newAddress.setClient(client);
                 entityManager.persist(newAddress);
                 return true;
@@ -262,7 +263,6 @@ public class DbManager implements DbManagerLocal {
 
 
     private void openEntityManager() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("default");
         entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
 
@@ -273,7 +273,6 @@ public class DbManager implements DbManagerLocal {
             entityManager.getTransaction().commit();
         }
         entityManager.close();
-        entityManagerFactory.close();
     }
 
 }
