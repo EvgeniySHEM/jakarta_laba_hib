@@ -1,5 +1,6 @@
 package ru.sanctio.jakarta_laba_hib.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
@@ -33,8 +34,7 @@ public class ClientEntity implements Serializable {
     @Basic
     @Column(name = "added")
     private Date added;
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-//    @Transient
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<AddressEntity> addresses = new ArrayList<>();
 
     public ClientEntity() {

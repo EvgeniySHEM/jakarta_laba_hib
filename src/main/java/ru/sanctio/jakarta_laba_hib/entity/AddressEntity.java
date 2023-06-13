@@ -114,7 +114,7 @@ public class AddressEntity implements Serializable {
         this.address = address;
     }
 
-    @Transient
+
     public ClientEntity getClient() {
         return client;
     }
