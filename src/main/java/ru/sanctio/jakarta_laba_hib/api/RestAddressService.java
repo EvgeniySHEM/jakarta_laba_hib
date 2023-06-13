@@ -26,7 +26,6 @@ public class RestAddressService {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-//    @Transactional
     public List<AddressEntity> getAllAddress() {
         return dbManager.getAllInformation();
     }
@@ -45,8 +44,8 @@ public class RestAddressService {
     }
 
     @DELETE
-    @Path("{idAdr}/{idCl}")
-    public void delete(@PathParam("idAdr") String idAdr, @PathParam("idCl") String idCl) {
-        dbManager.deleteAddress(idAdr, idCl);
+    @Path("{idAdr}")
+    public void delete(@PathParam("idAdr") String idAdr) {
+        dbManager.deleteAddress(idAdr);
     }
 }

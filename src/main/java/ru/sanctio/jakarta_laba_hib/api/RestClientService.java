@@ -2,13 +2,11 @@ package ru.sanctio.jakarta_laba_hib.api;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import ru.sanctio.jakarta_laba_hib.dao.DbManagerLocal;
 import ru.sanctio.jakarta_laba_hib.entity.ClientEntity;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -28,13 +26,14 @@ public class RestClientService {
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public List<ClientEntity> getAllClients() {
+        System.out.println(dbManager.getAllClient());
         return dbManager.getAllClient();
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public void createNewClient(ClientEntity client) {
-        if(client.getAdded() == null) {
+        if (client.getAdded() == null) {
             client.setAdded(LocalDate.now().toString());
         }
         dbManager.createNewClient(client);
@@ -43,7 +42,7 @@ public class RestClientService {
     @PUT
     @Consumes(MediaType.APPLICATION_XML)
     public void update(ClientEntity client) {
-        if(client.getAdded() == null) {
+        if (client.getAdded() == null) {
             client.setAdded(LocalDate.now().toString());
         }
         System.out.println(client);

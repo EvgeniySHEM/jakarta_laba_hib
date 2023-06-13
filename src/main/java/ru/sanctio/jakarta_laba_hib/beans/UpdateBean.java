@@ -22,8 +22,8 @@ public class UpdateBean implements UpdateBeanLocal{
     }
 
     @Override
-    public void delete(String addressId, String clientId) {
-        repository.deleteAddress(addressId, clientId);
+    public void delete(String addressId) {
+        repository.deleteAddress(addressId);
     }
 
     @Override

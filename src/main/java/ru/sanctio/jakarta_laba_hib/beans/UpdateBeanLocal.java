@@ -11,7 +11,7 @@ public interface UpdateBeanLocal {
 
     boolean addClientAddress(AddressEntity newAddress, String clientId);
 
-    void delete(String addressId, String clientId);
+    void delete(String addressId);
 
     boolean update(ClientEntity client, AddressEntity addressEntity);
 

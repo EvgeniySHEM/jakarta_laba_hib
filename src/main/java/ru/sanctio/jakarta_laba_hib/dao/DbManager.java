@@ -35,10 +35,11 @@ public class DbManager implements DbManagerLocal {
     public List<AddressEntity> getAllInformation() {
         openEntityManager();
         try {
-            Query query = entityManager.createNativeQuery("select * from address", AddressEntity.class);
-            List<AddressEntity> addressList = query.getResultList();
-            System.out.println(addressList);
-            return addressList;
+//            Query query = entityManager.createNativeQuery("select * from address", AddressEntity.class);
+//            List<AddressEntity> addressList = query.getResultList();
+//            System.out.println(addressList);
+//            return addressList;
+            return entityManager.createNativeQuery("select * from address", AddressEntity.class).getResultList();
         } finally {
             closeEntityManager();
         }
@@ -117,7 +118,6 @@ public class DbManager implements DbManagerLocal {
                 "mac = '" + address.getMac() + "' and model = '" + address.getModel() + "' and" +
                 " address = '" + address.getAddress() + "'";
         List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
-        System.out.println(addressList.size());
         if (addressList.size() > 0) {
             entityManager.getTransaction().rollback();
             return false;
@@ -212,17 +212,6 @@ public class DbManager implements DbManagerLocal {
     }
 
     @Override
-    public void deleteClient(String id) {
-        openEntityManager();
-        try {
-            ClientEntity client = entityManager.find(ClientEntity.class, id);
-            entityManager.remove(client);
-        } finally {
-            closeEntityManager();
-        }
-    }
-
-    @Override
     public boolean addClientAddress(AddressEntity newAddress, String clientId) {
         openEntityManager();
         try {
@@ -245,16 +234,28 @@ public class DbManager implements DbManagerLocal {
     }
 
     @Override
-    public void deleteAddress(String addressId, String clientId) {
+    public void deleteClient(String id) {
+        openEntityManager();
+        try {
+            ClientEntity client = entityManager.find(ClientEntity.class, id);
+            entityManager.remove(client);
+        } finally {
+            closeEntityManager();
+        }
+    }
+
+    @Override
+    public void deleteAddress(String addressId) {
         openEntityManager();
         try {
             AddressEntity address = entityManager.find(AddressEntity.class, addressId);
+            int client = address.getClient().getClientId();
             entityManager.remove(address);
-            String checkFK = "select * from address where clientId =" + clientId;
+            String checkFK = "select * from address where clientId =" + client;
             List<AddressEntity> addressList = entityManager.createNativeQuery(checkFK, AddressEntity.class).getResultList();
             if (addressList.size() == 0) {
-                ClientEntity client = entityManager.find(ClientEntity.class, clientId);
-                entityManager.remove(client);
+                String delete = "delete from client where clientId =" + client;
+                entityManager.createNativeQuery(delete).executeUpdate();
             }
         } finally {
             closeEntityManager();

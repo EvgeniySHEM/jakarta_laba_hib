@@ -98,7 +98,6 @@ public class ViewListServlet extends HttpServlet {
             out.println("<input type=\"submit\" value=\"Update\"></form></td>");
             out.println("<td><form action=\"Delete\" method=\"get\" align=\"center\">");
             out.println("<input type=\"hidden\" name=\"addressId\" value=\"" + address.getId() + "\">");
-            out.println("<input type=\"hidden\" name=\"clientId\" value=\"" + address.getClient().getClientId() + "\">");
             out.println("<input type=\"submit\" value=\"Delete\"></form></td>");
             out.println("<td><form action=\"AddClientAddress.jsp\" method=\"get\" align=\"center\">");
             out.println("<input type=\"hidden\" name=\"hidden\" value=\"" + address.getClient().getClientId() + "\">");

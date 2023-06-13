@@ -15,8 +15,7 @@ public class DeleteServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String addressId = request.getParameter("addressId");
-        String clientId = request.getParameter("clientId");
-        updateBean.delete(addressId, clientId);
+        updateBean.delete(addressId);
         response.sendRedirect("ViewListServlet");
     }
 }

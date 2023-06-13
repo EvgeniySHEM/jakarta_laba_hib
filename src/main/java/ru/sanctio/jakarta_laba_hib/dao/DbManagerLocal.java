@@ -17,8 +17,6 @@ public interface DbManagerLocal {
 
     boolean addClientAddress(AddressEntity newAddress, String clientId);
 
-    void deleteAddress(String addressId, String clientId);
-
     boolean createNewClient(ClientEntity newClient, AddressEntity newAddress);
 
     void createNewClient(ClientEntity client);
@@ -34,4 +32,5 @@ public interface DbManagerLocal {
     ClientEntity getClientById(Integer id);
 
     void deleteClient(String id);
+    void deleteAddress(String addressId);
 }

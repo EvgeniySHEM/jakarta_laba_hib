@@ -2,6 +2,7 @@ package ru.sanctio.jakarta_laba_hib.entity;
 
 import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 import java.io.Serializable;
 
@@ -22,7 +23,7 @@ public class ClientEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "clientid")
-    private int clientid;
+    private int clientId;
     @Basic
     @Column(name = "clientname")
     private String clientName;
@@ -33,6 +34,7 @@ public class ClientEntity implements Serializable {
     @Column(name = "added")
     private Date added;
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+//    @Transient
     private List<AddressEntity> addresses = new ArrayList<>();
 
     public ClientEntity() {
@@ -44,17 +46,17 @@ public class ClientEntity implements Serializable {
         setAdded(added);
     }
 
-    public ClientEntity(int clientid, String clientName, String type, String added) {
+    public ClientEntity(int clientId, String clientName, String type, String added) {
         this(clientName, type, added);
-        setClientId(clientid);
+        setClientId(clientId);
     }
 
     public int getClientId() {
-        return clientid;
+        return clientId;
     }
 
     public void setClientId(int clientid) {
-        this.clientid = clientid;
+        this.clientId = clientid;
     }
 
     public String getClientName() {
@@ -85,8 +87,12 @@ public class ClientEntity implements Serializable {
         this.type = type;
     }
 
-    public Date getAdded() {
-        return added;
+    public String getAdded() {
+        if(added == null) {
+            LocalDate date = LocalDate.now();
+            added = Date.valueOf(date);
+        }
+        return added.toLocalDate().toString();
     }
 
     public void setAdded(String date) {
@@ -116,7 +122,7 @@ public class ClientEntity implements Serializable {
 
         ClientEntity that = (ClientEntity) o;
 
-        if (clientid != that.clientid) return false;
+        if (clientId != that.clientId) return false;
         if (clientName != null ? !clientName.equals(that.clientName) : that.clientName != null) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (added != null ? !added.equals(that.added) : that.added != null) return false;
@@ -126,7 +132,7 @@ public class ClientEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = clientid;
+        int result = clientId;
         result = 31 * result + (clientName != null ? clientName.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (added != null ? added.hashCode() : 0);
@@ -136,7 +142,7 @@ public class ClientEntity implements Serializable {
     @Override
     public String toString() {
         return "ClientEntity{" +
-                "clientid=" + clientid +
+                "clientid=" + clientId +
                 ", clientName='" + clientName + '\'' +
                 ", type='" + type + '\'' +
                 ", added=" + added +
