@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
+import org.hibernate.Hibernate;
 import ru.sanctio.jakarta_laba_hib.entity.AddressEntity;
 import ru.sanctio.jakarta_laba_hib.entity.ClientEntity;
 import ru.sanctio.jakarta_laba_hib.entity.UsersEntity;
@@ -15,7 +16,7 @@ import java.util.List;
 public class DbManager implements DbManagerLocal {
     //    @PersistenceContext
 //    private EntityManager entityManager;
-    private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");;
+    private final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
     private EntityManager entityManager;
 
     @Override
@@ -35,10 +36,6 @@ public class DbManager implements DbManagerLocal {
     public List<AddressEntity> getAllInformation() {
         openEntityManager();
         try {
-//            Query query = entityManager.createNativeQuery("select * from address", AddressEntity.class);
-//            List<AddressEntity> addressList = query.getResultList();
-//            System.out.println(addressList);
-//            return addressList;
             return entityManager.createNativeQuery("select * from address", AddressEntity.class).getResultList();
         } finally {
             closeEntityManager();
@@ -53,7 +50,8 @@ public class DbManager implements DbManagerLocal {
                     "           where (c.clientName like '%" + filterName + "%' or a.address like '%" + filterName + "%')" +
                     "and c.type = '" + filterType + "'";
             List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
-            System.out.println(addressList);
+//            System.out.println(addressList);
+            Hibernate.initialize(addressList);
             return addressList;
         } finally {
             closeEntityManager();
@@ -67,7 +65,7 @@ public class DbManager implements DbManagerLocal {
             String sql = "select a.* from client c join address a on c.clientId = a.clientid\n" +
                     "where c.clientName like '%" + filterName + "%' or a.address like '%" + filterName + "%'";
             List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
-            System.out.println(addressList);
+            Hibernate.initialize(addressList);
             return addressList;
         } finally {
             closeEntityManager();
@@ -81,7 +79,7 @@ public class DbManager implements DbManagerLocal {
             String sql = "select a.* from client c join address a on c.clientId = a.clientid\n" +
                     "           where c.type = '" + filterType + "'";
             List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
-            System.out.println(addressList);
+            Hibernate.initialize(addressList);
             return addressList;
         } finally {
             closeEntityManager();
@@ -192,7 +190,7 @@ public class DbManager implements DbManagerLocal {
         try {
             List<ClientEntity> clients =
                     entityManager.createNativeQuery("select * from client", ClientEntity.class).getResultList();
-            System.out.println(clients);
+            Hibernate.initialize(clients);
             return clients;
         } finally {
             closeEntityManager();
@@ -204,7 +202,7 @@ public class DbManager implements DbManagerLocal {
         openEntityManager();
         try {
             ClientEntity client = entityManager.find(ClientEntity.class, id);
-            System.out.println(client);
+            Hibernate.initialize(client);
             return client;
         } finally {
             closeEntityManager();
@@ -221,7 +219,7 @@ public class DbManager implements DbManagerLocal {
             List<AddressEntity> addressList = entityManager.createNativeQuery(sql, AddressEntity.class).getResultList();
             if (addressList.size() == 0) {
                 ClientEntity client = entityManager.find(ClientEntity.class, clientId);
-                System.out.println(client);
+                Hibernate.initialize(client);
                 newAddress.setClient(client);
                 entityManager.persist(newAddress);
                 return true;

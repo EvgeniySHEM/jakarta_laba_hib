@@ -14,6 +14,10 @@ public class DemoSAX extends DefaultHandler {
 
     private final Map<Integer, ClientEntity> clients = new HashMap<>();
 
+    public void setFilter(String filterXML) {
+        filter = filterXML;
+    }
+
     public List<ClientEntity> getClients() {
         return new ArrayList<>(clients.values());
     }
@@ -41,9 +45,5 @@ public class DemoSAX extends DefaultHandler {
                 clients.get(Integer.parseInt(attributes.getValue("clientId"))).addAddress(address);
             }
         }
-    }
-
-    public void setFilter(String filterXML) {
-        filter = filterXML;
     }
 }

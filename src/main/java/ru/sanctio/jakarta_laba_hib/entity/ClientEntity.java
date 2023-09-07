@@ -35,7 +35,7 @@ public class ClientEntity implements Serializable {
     @Column(name = "added")
     private Date added;
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<AddressEntity> addresses = new ArrayList<>();
+    private transient List<AddressEntity> addresses = new ArrayList<>();
 
     public ClientEntity() {
     }

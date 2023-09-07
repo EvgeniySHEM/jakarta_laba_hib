@@ -31,9 +31,6 @@ public class SelectBean implements SelectBeanLocal {
     @EJB
     private DemoDOMLocal demoDOM;
 
-//    @EJB
-//    private DemoSAX demoSAX;
-
     @Override
     public List<AddressEntity> getData(String filterName, String filterType) {
         if ((filterName != null && !filterName.isEmpty()) && (filterType != null && !filterType.isEmpty())) {
